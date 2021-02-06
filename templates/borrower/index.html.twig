@@ -3,9 +3,9 @@
 {% block title %}Borrower index{% endblock %}
 
 {% block body %}
-    <h1>Borrower index</h1>
+    <h1>Bienvenue au pays des livres</h1>
 
-    <table class="table">
+    {# <table class="table">
         <thead>
             <tr>
                 <th>Id</th>
@@ -16,10 +16,15 @@
                 <th>BorrowerCard</th>
                 <th>actions</th>
             </tr>
-        </thead>
+        </thead> #}
         <tbody>
         {% for borrower in borrowers %}
-            <tr>
+        <p>
+        Pour pouvoir emprunter un livre, merci de vous inscrire en saisissant votre adresse mail
+        <br>
+        Si vous avez déjà renseigné votre mail, pas besoin de le renseigner de nouveau
+        </p>
+            {# <tr>
                 <td>{{ borrower.id }}</td>
                 <td>{{ borrower.borrowerName }}</td>
                 <td>{{ borrower.borrowerContact }}</td>
@@ -27,10 +32,10 @@
                 <td>{{ borrower.borrowerStatus }}</td>
                 <td>{{ borrower.borrowerCard }}</td>
                 <td>
-                    <a href="{{ path('borrower_show', {'id': borrower.id}) }}">show</a>
-                    <a href="{{ path('borrower_edit', {'id': borrower.id}) }}">edit</a>
-                </td>
-            </tr>
+                    {# <a href="{{ path('borrower_show', {'id': borrower.id}) }}">show</a> #}
+                    {# <a href="{{ path('borrower_edit', {'id': borrower.id}) }}">edit</a> #}
+                {# </td>
+            </tr>  #}
         {% else %}
             <tr>
                 <td colspan="7">no records found</td>
@@ -39,5 +44,5 @@
         </tbody>
     </table>
 
-    <a href="{{ path('borrower_new') }}">Create new</a>
+    <a href="{{ path('borrower_new') }}">s'inscrire</a>
 {% endblock %}
