@@ -1,17 +1,29 @@
 security:
+    encoders:
+        App\Entity\User:
+            algorithm: auto
+
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
-        users_in_memory: { memory: null }
+        # used to reload user from session & other features (e.g. switch_user)
+        app_user_provider:
+            entity:
+                class: App\Entity\User
+                property: email
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
-            anonymous: lazy
-            provider: users_in_memory
+            anonymous: true
+            lazy: true
+            provider: app_user_provider
+
+            logout:
+                path: app_logout
             guard:
                 authenticators:
-                    - App\Security\BorrowerAuthenticator
+                    - App\Security\AppLoginAuthenticator
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#firewalls-authentication
@@ -22,5 +34,43 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/user, roles: [ROLE_ADMIN, ROLE_USER] }
+        - { path: ^/loan, roles:  [ROLE_ADMIN, ROLE_USER] }
+        - { path: ^/book, roles: [ROLE_ADMIN, ROLE_USER, ROLE_BORROWER] }
+    
+        
+        # book_index
+        - { path: ^/book/?$, roles: [ROLE_ADMIN, ROLE_USER, ROLE_BORROWER] }
+        # book_new
+        - { path: ^/book/new$, roles: [ROLE_ADMIN, ROLE_USER] }
+        # book_show
+        - { path: '^/book/[0-9]+$', methods: GET, roles: [ROLE_ADMIN, ROLE_USER, ROLE_BORROWER] }
+        # book_edit
+        - { path: '^/book/[0-9]+/edit$', methods: [GET, POST], roles: [ROLE_ADMIN, ROLE_USER] }
+        # book_delete
+        - { path: '^/book/[0+9]+$', methods: DELETE, roles: [ROLE_ADMIN, ROLE_USER] }
+
+
+        # borrower_index
+        - { path: ^/borrower/?$, roles: [ROLE_ADMIN, ROLE_USER, ROLE_BORROWER] }
+        # borrower_new
+        - { path: ^/borrower/new$, roles: [ROLE_ADMIN, ROLE_USER] }
+        # borrower_show
+        - { path: '^/borrower/[0-9]+$', methods: GET, roles: [ROLE_ADMIN, ROLE_USER, ROLE_BORROWER] }
+        # borrower_edit
+        - { path: '^/borrower/[0-9]+/edit$', methods: [GET, POST], roles: [ROLE_ADMIN, ROLE_USER] }
+        # borrower_delete
+        - { path: '^/borrower/[0+9]+$', methods: DELETE, roles: [ROLE_ADMIN, ROLE_USER] }
+
+        # loan_index
+        - { path: ^/loan/?$, roles: [ROLE_ADMIN, ROLE_USER, ROLE_BORROWER] }
+        # loan_new
+        - { path: ^/loan/new$, roles: [ROLE_ADMIN, ROLE_USER] }
+        # loan_show
+        - { path: '^/loan/[0-9]+$', methods: GET, roles: [ROLE_ADMIN, ROLE_USER, ROLE_BORROWER] }
+        # loan_edit
+        - { path: '^/loan/[0-9]+/edit$', methods: [GET, POST], roles: [ROLE_ADMIN, ROLE_USER] }
+        # loan_delete
+        - { path: '^/loan/[0+9]+$', methods: DELETE, roles: [ROLE_ADMIN, ROLE_USER] }
+        
+
